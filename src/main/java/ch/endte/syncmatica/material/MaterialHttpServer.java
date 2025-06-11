@@ -174,6 +174,8 @@ public class MaterialHttpServer {
     // 加载翻译文件
     private void loadTranslations() {
         translationMap = new HashMap<>();
+        int totalTranslations = 0;
+        boolean syncmaticaTranslationsLoaded = false;
         
         try {
             // 首先尝试加载zh_cn_block.json文件（包含完整的Minecraft方块翻译）
@@ -186,28 +188,29 @@ public class MaterialHttpServer {
                     for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
                         if (entry.getValue().isJsonPrimitive()) {
                             translationMap.put(entry.getKey(), entry.getValue().getAsString());
-                        }
-                    }
-                }
-                return; // 如果成功加载了block翻译文件，无需继续加载其他翻译
-            }
-            
-            // 如果没有找到block翻译文件，继续尝试其他来源
-            
-            // 尝试从ClassLoader资源中加载zh_cn.json
-            InputStream inputStream = MaterialHttpServer.class.getClassLoader().getResourceAsStream("assets/minecraft/lang/zh_cn.json");
-            if (inputStream != null) {
-                try (InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
-                    JsonObject jsonObject = gson.fromJson(reader, JsonObject.class);
-                    
-                    // 将JSON转换为Map
-                    for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
-                        if (entry.getValue().isJsonPrimitive()) {
-                            translationMap.put(entry.getKey(), entry.getValue().getAsString());
+                            totalTranslations++;
                         }
                     }
                 }
             } else {
+                // 如果没有找到block翻译文件，继续尝试其他来源
+                
+                // 尝试从ClassLoader资源中加载zh_cn.json
+                InputStream inputStream = MaterialHttpServer.class.getClassLoader().getResourceAsStream("assets/minecraft/lang/zh_cn.json");
+                if (inputStream != null) {
+                    try (InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+                        JsonObject jsonObject = gson.fromJson(reader, JsonObject.class);
+                        
+                        // 将JSON转换为Map
+                        for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
+                            if (entry.getValue().isJsonPrimitive()) {
+                                translationMap.put(entry.getKey(), entry.getValue().getAsString());
+                                totalTranslations++;
+                            }
+                        }
+                    }
+                }
+                
                 // 尝试从MinecraftClient加载
                 if (isClientSide()) {
                     try {
@@ -224,18 +227,20 @@ public class MaterialHttpServer {
                                     for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
                                         if (entry.getValue().isJsonPrimitive()) {
                                             translationMap.put(entry.getKey(), entry.getValue().getAsString());
+                                            totalTranslations++;
                                         }
                                     }
                                 }
                             }
                         }
                     } catch (Exception e) {
-                        // 忽略错误
+                        // 保持静默
                     }
                 }
             }
             
-            // 加载syncmatica自己的翻译
+            // 无论使用哪种方法加载主要翻译，都加载syncmatica自己的翻译
+            int syncmaticaTranslations = 0;
             try {
                 InputStream syncmaticaStream = MaterialHttpServer.class.getClassLoader().getResourceAsStream("assets/syncmatica/lang/zh_cn.json");
                 if (syncmaticaStream != null) {
@@ -245,15 +250,23 @@ public class MaterialHttpServer {
                         for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
                             if (entry.getValue().isJsonPrimitive()) {
                                 translationMap.put(entry.getKey(), entry.getValue().getAsString());
+                                syncmaticaTranslations++;
                             }
                         }
                     }
+                    syncmaticaTranslationsLoaded = true;
                 }
             } catch (Exception e) {
-                // 忽略错误
+                // 保持静默
+            }
+            
+            if (totalTranslations == 0 && !syncmaticaTranslationsLoaded) {
+                // 无法加载任何中文翻译文件
+            } else {
+                // 成功加载中文翻译
             }
         } catch (Exception e) {
-            // 忽略错误，使用预定义的常用翻译和备选策略
+            // 保持静默
         }
         
         // 加载通用文本翻译
@@ -341,9 +354,8 @@ public class MaterialHttpServer {
             server.setExecutor(Executors.newFixedThreadPool(4));
             server.start();
             
-            LOGGER.info("syncmatica HTTP Server started on port *:" + DEFAULT_PORT);
         } catch (IOException e) {
-            // 忽略错误
+            // 保持静默
         }
     }
 
@@ -554,10 +566,14 @@ public class MaterialHttpServer {
     }
     
     /**
-     * 获取翻译文本
+     * 获取翻译后的文本，如果没有找到翻译则返回默认值
      */
     public String getTranslatedText(String key, String defaultValue) {
-        ensureTranslationsLoaded();
+        // 如果翻译还未加载，先返回默认值
+        if (translationMap == null) {
+            return defaultValue;
+        }
+        
         return translationMap.getOrDefault(key, defaultValue);
     }
     

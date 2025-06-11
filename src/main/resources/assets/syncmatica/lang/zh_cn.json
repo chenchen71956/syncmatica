@@ -54,5 +54,6 @@
 	"syncmatica.text.total": "总计",
 	"syncmatica.text.materials": "个材料",
 	"syncmatica.text.different_types": "种不同类型",
-	"syncmatica.text.no_materials": "没有找到材料数据"
+	"syncmatica.text.no_materials": "没有找到材料数据",
+	"syncmatica.text.collected": "已收集"
 }
