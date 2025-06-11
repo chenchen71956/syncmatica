@@ -119,7 +119,7 @@ public class SyncmaticManager {
                 final JsonArray arr = obj.getAsJsonArray(PLACEMENTS_JSON_KEY);
                 for (final JsonElement elem : arr) {
                     final ServerPlacement placement = ServerPlacement.fromJson(elem.getAsJsonObject(), context);
-                    schematics.put(placement.getId(), placement); // NOSONAR
+                    schematics.put(placement.getId(), placement); 
                 }
 
             } catch (final IllegalStateException | NullPointerException e) {

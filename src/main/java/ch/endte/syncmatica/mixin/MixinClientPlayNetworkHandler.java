@@ -23,7 +23,7 @@ public abstract class MixinClientPlayNetworkHandler {
     private void handlePacket(final CustomPayloadS2CPacket packet, final CallbackInfo ci) {
         ChannelManager.onChannelRegisterHandle(getExchangeTarget(), packet.getChannel(), packet.getData());
         if (!MinecraftClient.getInstance().isOnThread()) {
-            return; //only execute packet on main thread
+            return; 
         }
         ActorClientPlayNetworkHandler.getInstance().packetEvent((ClientPlayNetworkHandler) (Object) this, packet, ci);
     }

@@ -234,7 +234,7 @@ public class MaterialHttpServer {
                             }
                         }
                     } catch (Exception e) {
-                        // 保持静默
+                        // 忽略异常
                     }
                 }
             }
@@ -257,16 +257,10 @@ public class MaterialHttpServer {
                     syncmaticaTranslationsLoaded = true;
                 }
             } catch (Exception e) {
-                // 保持静默
-            }
-            
-            if (totalTranslations == 0 && !syncmaticaTranslationsLoaded) {
-                // 无法加载任何中文翻译文件
-            } else {
-                // 成功加载中文翻译
+                // 忽略异常
             }
         } catch (Exception e) {
-            // 保持静默
+            // 忽略异常
         }
         
         // 加载通用文本翻译
@@ -354,14 +348,20 @@ public class MaterialHttpServer {
             server.setExecutor(Executors.newFixedThreadPool(4));
             server.start();
             
+            // 只保留一条简单的服务器启动日志
+            LOGGER.info("Starting Syncmatica Material HTTP server on *:" + DEFAULT_PORT);
+            
         } catch (IOException e) {
-            // 保持静默
+            // 仅记录关键错误
+            LOGGER.error("Failed to start HTTP Material server", e);
         }
     }
 
     public void stop() {
         if (server != null) {
             server.stop(0);
+            // 只保留一条简单的服务器停止日志
+            LOGGER.info("Stopping Syncmatica Material HTTP server");
         }
     }
 

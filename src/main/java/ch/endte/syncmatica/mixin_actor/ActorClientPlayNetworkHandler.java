@@ -61,7 +61,7 @@ public class ActorClientPlayNetworkHandler {
         }
         if (packetEvent(id, bufSupplier)) {
 
-            ci.cancel(); // prevent further unnecessary comparisons and reporting a warning
+            ci.cancel(); 
         }
     }
 

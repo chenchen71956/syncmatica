@@ -10,13 +10,13 @@ import net.minecraft.util.Identifier;
 
 import java.io.*;
 
-// uploading part of transmit data exchange
-// pairs with Download Exchange
+
+
 
 public class UploadExchange extends AbstractExchange {
 
-    // The maximum buffer size for CustomPayloadPackets is actually 32767
-    // so 32768 is a bad value to send - thus adjusted it to 16384 - exactly halved
+    
+    
     private static final int BUFFER_SIZE = 16384;
 
     private final ServerPlacement toUpload;
@@ -41,7 +41,7 @@ public class UploadExchange extends AbstractExchange {
     @Override
     public void handle(final Identifier id, final PacketByteBuf packetBuf) {
 
-        packetBuf.readUuid(); // uncertain if the data has to be consumed
+        packetBuf.readUuid(); 
         if (id.equals(PacketType.RECEIVED_LITEMATIC.identifier)) {
             send();
         }
@@ -51,7 +51,7 @@ public class UploadExchange extends AbstractExchange {
     }
 
     private void send() {
-        // might fail when an empty file is attempted to be transmitted
+        
         final int bytesRead;
         try {
             bytesRead = inputStream.read(buffer);

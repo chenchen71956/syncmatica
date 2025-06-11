@@ -28,7 +28,7 @@ public class MixinMinecraftServer {
         ).startup();
     }
 
-    // at
+    
     @Inject(method = "shutdown", at = @At("TAIL"))
     public void shutdownSyncmatica(final CallbackInfo ci) {
         Syncmatica.shutdown();

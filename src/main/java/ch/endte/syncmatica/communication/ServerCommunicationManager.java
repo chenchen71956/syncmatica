@@ -74,7 +74,7 @@ public class ServerCommunicationManager extends CommunicationManager {
             try {
                 upload = new UploadExchange(placement, toUpload, source, context);
             } catch (final FileNotFoundException e) {
-                // should be fine
+                
                 e.printStackTrace();
                 return;
             }
@@ -89,7 +89,7 @@ public class ServerCommunicationManager extends CommunicationManager {
                 return;
             }
 
-            // when the client does not communicate the owner
+            
             final GameProfile profile = playerMap.get(source).getGameProfile();
             final PlayerIdentifier playerIdentifier = context.getPlayerIdentifierProvider().createOrGet(profile);
             if (!placement.getOwner().equals(playerIdentifier)) {
@@ -98,7 +98,7 @@ public class ServerCommunicationManager extends CommunicationManager {
             }
 
             if (!context.getFileStorage().getLocalState(placement).isLocalFileReady()) {
-                // special edge case because files are transmitted by placement rather than file names/hashes
+                
                 if (context.getFileStorage().getLocalState(placement) == LocalLitematicState.DOWNLOADING_LITEMATIC) {
                     downloadingFile.computeIfAbsent(placement.getHash(), key -> new ArrayList<>()).add(placement);
                     return;
@@ -171,7 +171,7 @@ public class ServerCommunicationManager extends CommunicationManager {
             final ServerPlacement placement = ((ModifyExchangeServer) exchange).getPlacement();
             for (final ExchangeTarget client : broadcastTargets) {
                 if (client.getFeatureSet().hasFeature(Feature.MODIFY)) {
-                    // client supports modify so just send modify
+                    
                     final PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
                     buf.writeUuid(placement.getId());
                     putPositionData(placement, buf, client);
@@ -181,8 +181,8 @@ public class ServerCommunicationManager extends CommunicationManager {
                     }
                     client.sendPacket(PacketType.MODIFY.identifier, buf, context);
                 } else {
-                    // client doesn't support modification so
-                    // send data and then
+                    
+                    
                     final PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
                     buf.writeUuid(placement.getId());
                     client.sendPacket(PacketType.REMOVE_SYNCMATIC.identifier, buf, context);

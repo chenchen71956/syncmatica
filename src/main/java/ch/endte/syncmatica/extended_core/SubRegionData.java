@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class SubRegionData {
     private boolean isModified;
-    private Map<String, SubRegionPlacementModification> modificationData; // is null when isModified is false
+    private Map<String, SubRegionPlacementModification> modificationData; 
 
     public SubRegionData() {
         this(false, null);

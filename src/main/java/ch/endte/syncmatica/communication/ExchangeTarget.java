@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-// since Client/Server PlayNetworkHandler are 2 different classes, but I want to use exchanges
-// on both without having to recode them individually I have an adapter class here
+
+
 
 public class ExchangeTarget {
     public final ClientPlayNetworkHandler clientPlayNetworkHandler;
@@ -23,7 +23,7 @@ public class ExchangeTarget {
     private final String persistentName;
 
     private FeatureSet features;
-    private final List<Exchange> ongoingExchanges = new ArrayList<>(); // implicitly relies on priority
+    private final List<Exchange> ongoingExchanges = new ArrayList<>(); 
 
     public ExchangeTarget(ClientPlayNetworkHandler clientPlayNetworkHandler) {
         this.clientPlayNetworkHandler = clientPlayNetworkHandler;
@@ -37,8 +37,8 @@ public class ExchangeTarget {
         this.persistentName = serverPlayNetworkHandler.player.getUuidAsString();
     }
 
-    // this application exclusively communicates in CustomPayLoad packets
-    // this class handles the sending of either S2C or C2S packets
+    
+    
     public void sendPacket(final Identifier id, final PacketByteBuf packetBuf, final Context context) {
         if (context != null) {
             context.getDebugService().logSendPacket(id, persistentName);
@@ -53,7 +53,7 @@ public class ExchangeTarget {
         }
     }
 
-    // removed equals code due to issues with Collection.contains
+    
 
     public FeatureSet getFeatureSet() {
         return features;

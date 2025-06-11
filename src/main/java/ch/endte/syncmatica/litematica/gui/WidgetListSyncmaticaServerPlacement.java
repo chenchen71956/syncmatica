@@ -57,10 +57,10 @@ public class WidgetListSyncmaticaServerPlacement extends WidgetListBase<ServerPl
         return width - 6 - infoWidth;
     }
 
-    // source: WidgetFileBrowserBase
+    
     @Override
     public void drawContents(DrawContext drawContext, int mouseX, int mouseY, float partialTicks) {
-        // Draw an outline around the entire widget
+        
         RenderUtils.drawOutlinedBox(posX, posY, browserWidth, browserHeight, 0xB0000000, GuiBase.COLOR_HORIZONTAL_BAR);
 
         super.drawContents(drawContext, mouseX, mouseY, partialTicks);
@@ -137,7 +137,7 @@ public class WidgetListSyncmaticaServerPlacement extends WidgetListBase<ServerPl
     }
 
     public static class PlayerDistanceComparator implements Comparator<ServerPlacement> {
-        // should have probably turned this into multiple comparators rather than one big thing
+        
 
         private final String playerDimension;
         private final BlockPos playerPosition;

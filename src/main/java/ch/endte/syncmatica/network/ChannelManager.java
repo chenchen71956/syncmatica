@@ -36,9 +36,9 @@ public class ChannelManager {
 
     public static void onChannelRegisterHandle(ExchangeTarget target, Identifier channel, PacketByteBuf data) {
         if (channel.equals(MINECRAFT_REGISTER)) {
-            // 拷贝一份数据, 因为可能其他插件也存在通道
+            
             List<Identifier> identifiers = onReadRegisterIdentifier(new PacketByteBuf(data.copy()));
-            // 检查客户端是否已经注册该标识符, 如果已经注册那么向服务端发送注册请求
+            
             PacketByteBuf byteBuf2 = new PacketByteBuf(Unpooled.buffer());
             List<Identifier> registerChannels = target.isClient() ? clientRegisterChannels : serverRegisterChannels;
             for (Identifier identifier : identifiers) {
@@ -49,14 +49,14 @@ public class ChannelManager {
                     byteBuf2.writeByte(0x00);
                 }
             }
-            // 有数据时才有意义发送
+            
             if (byteBuf2.writerIndex() > 0) {
                 target.sendPacket(MINECRAFT_REGISTER, byteBuf2, null);
             }
         }
-//        else if (channel.equals(MINECRAFT_UNREGISTER)) {
-//            //TODO: 待实现，主要不知道数据格式，不过好像不影响使用
-//        }
+
+
+
     }
 
 

@@ -26,7 +26,7 @@ public class MaterialServerFeature {
             materialHttpServer.start();
             return true;
         } catch (Exception e) {
-            LOGGER.error("无法启动材料HTTP服务器", e);
+            LOGGER.error("Failed to start Material HTTP server", e);
             return false;
         }
     }
@@ -39,7 +39,7 @@ public class MaterialServerFeature {
             try {
                 materialHttpServer.stop();
             } catch (Exception e) {
-                LOGGER.error("停止材料HTTP服务器时出错", e);
+                LOGGER.error("Error stopping Material HTTP server", e);
             }
         }
     }

@@ -25,7 +25,7 @@ import java.util.*;
 public abstract class CommunicationManager {
     protected final Collection<ExchangeTarget> broadcastTargets;
 
-    // TODO: Refactor this bs
+    
     protected final Map<UUID, Boolean> downloadState;
     protected final Map<UUID, Exchange> modifyState;
 
@@ -64,10 +64,10 @@ public abstract class CommunicationManager {
         }
     }
 
-    // will get called for every packet not handled by an exchange
+    
     protected abstract void handle(ExchangeTarget source, Identifier id, PacketByteBuf packetBuf);
 
-    // will get called for every finished exchange (successful or not)
+    
     protected abstract void handleExchange(Exchange exchange);
 
     public void sendMetaData(final ServerPlacement metaData, final ExchangeTarget target) {
@@ -95,10 +95,10 @@ public abstract class CommunicationManager {
     public void putPositionData(final ServerPlacement metaData, final PacketByteBuf buf, final ExchangeTarget exchangeTarget) {
         buf.writeBlockPos(metaData.getPosition());
         buf.writeString(metaData.getDimension());
-        // one of the rare use cases for ordinal
-        // transmitting the information of a non modifying enum to another
-        // instance of this application with no regard to the persistence
-        // of the ordinal values over time
+        
+        
+        
+        
         buf.writeInt(metaData.getRotation().ordinal());
         buf.writeInt(metaData.getMirror().ordinal());
 
@@ -174,7 +174,7 @@ public abstract class CommunicationManager {
 
     public void download(final ServerPlacement syncmatic, final ExchangeTarget source) throws NoSuchAlgorithmException, IOException {
         if (!context.getFileStorage().getLocalState(syncmatic).isReadyForDownload()) {
-            // forgot a negation here
+            
             throw new IllegalArgumentException(syncmatic.toString() + " is not ready for download local state is: " + context.getFileStorage().getLocalState(syncmatic).toString());
         }
         final File toDownload = context.getFileStorage().createLocalLitematic(syncmatic);
